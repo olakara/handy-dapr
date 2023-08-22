@@ -1,0 +1,67 @@
+version: '3.4'
+services:
+  redis:
+    image: 'redis:alpine'
+    ports:
+      - '6380:6379'
+
+  personapp:
+    image: person-app
+    build:
+      context: ./person-app
+      dockerfile: Dockerfile
+    ports:
+      - '9090:80'
+      - '3505:3505'
+    environment:
+      - DAPR_HTTP_PORT=3505
+    depends_on:
+      - redis
+
+  greeter:
+    image: greeter
+    ports:
+      - '5050:80'
+      - '3506:3506'
+    environment:
+      - DAPR_HTTP_PORT=3506
+
+  personapp-dapr:
+    image: 'daprio/daprd:edge'
+    command:
+      [
+        './daprd',
+        '--app-id',
+        'personapp',
+        '--app-port',
+        '80',
+        '--dapr-http-port',
+        '3505',
+        '--components-path',
+        '/components',
+      ]
+    volumes:
+      - './components/:/components'
+    depends_on:
+      - personapp
+    network_mode: 'service:personapp'
+
+  greeter-dapr:
+    image: 'daprio/daprd:latest'
+    command:
+      [
+        './daprd',
+        '--app-id',
+        'greeter',
+        '--app-port',
+        '80',
+        '--dapr-http-port',
+        '3506',
+        '--components-path',
+        '/components',
+      ]
+    volumes:
+      - './components/:/components'
+    depends_on:
+      - greeter
+    network_mode: 'service:greeter'
