@@ -19,7 +19,7 @@ app.MapGet("/call", async (DaprClient client) =>
         var data = await result.Content.ReadFromJsonAsync<Data>();
         return data.Message?? "Empty!";
     }
-    else return "Error!";
+    else return result.StatusCode.ToString();
     
 });
 
