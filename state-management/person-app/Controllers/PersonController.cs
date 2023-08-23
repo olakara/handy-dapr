@@ -17,12 +17,14 @@ public class PersonController : ControllerBase
     [HttpGet("/")]
     public IActionResult Get()
     {
+        _logger.LogInformation("PersonController / GET");
         return Ok("Ok!");
     }
 
     [HttpPost("/")]
     public IActionResult Post()
     {
+        _logger.LogInformation("PersonController / POST");
         return Ok("Ok!");
     }
 }

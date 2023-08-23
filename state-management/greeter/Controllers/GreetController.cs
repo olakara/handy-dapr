@@ -16,6 +16,7 @@ public class GreetController : ControllerBase
     [HttpGet(Name = "Greet")]
     public IActionResult Get()
     {
+        _logger.LogInformation("GreetController / GET");
         return Ok("Ok!");
     }
 }
