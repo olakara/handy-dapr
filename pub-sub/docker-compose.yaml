@@ -19,19 +19,24 @@ services:
       dockerfile: Dockerfile
     ports:
       - '3506:3506'
+      - '5050:80'
     environment:
       - DAPR_HTTP_PORT=3506
 
   random-messenger-dapr:
     image: 'daprio/daprd:edge'
-    command: ['./daprd', '--app-id', 'random-messenger', '--dapr-http-port', '3505']
+    command: ['./daprd', '--app-id', 'random-messenger', '--dapr-http-port', '3505', '--components-path', '/components',]
+    volumes:
+      - './components/:/components'
     depends_on:
       - random-messenger
     network_mode: 'service:random-messenger'
 
   listener-dapr:
     image: 'daprio/daprd:edge'
-    command: ['./daprd', '--app-id', 'listener', '--dapr-http-port', '3506']
+    command: ['./daprd', '--app-id', 'listener','--app-port', '80', '--dapr-http-port', '3506', "--components-path", "/components"]
+    volumes:
+      - './components/:/components'
     depends_on:
       - listener
     network_mode: 'service:listener'

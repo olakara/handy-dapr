@@ -10,7 +10,6 @@ namespace RandomMessenger
 
         static async Task Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
             while (true)
             {
                 var t = Task.Run(async delegate { await Task.Delay(TimeSpan.FromSeconds(5)); });
