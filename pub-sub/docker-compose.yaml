@@ -25,18 +25,14 @@ services:
 
   random-messenger-dapr:
     image: 'daprio/daprd:edge'
-    command: ['./daprd', '--app-id', 'random-messenger', '--dapr-http-port', '3505', '--components-path', '/components',]
-    volumes:
-      - './components/:/components'
+    command: ['./daprd', '--app-id', 'random-messenger', '--app-port', '80', '--dapr-http-port', '3505']
     depends_on:
       - random-messenger
     network_mode: 'service:random-messenger'
 
   listener-dapr:
     image: 'daprio/daprd:edge'
-    command: ['./daprd', '--app-id', 'listener','--app-port', '80', '--dapr-http-port', '3506', "--components-path", "/components"]
-    volumes:
-      - './components/:/components'
+    command: ['./daprd', '--app-id', 'listener', '--app-port', '80', '--dapr-http-port', '3506']
     depends_on:
       - listener
     network_mode: 'service:listener'
